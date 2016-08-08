@@ -47,3 +47,4 @@
   args:
     creates: '{{ roundcube_nginx_ssl_save_path }}/dhparam.pem'
   async: 120
+  tags: ['skip_ansible_lint']
