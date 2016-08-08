@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-SSL_CERT=/etc/.ssl/certificate.pem
-SSL_KEY=/etc/.ssl/certificate_key.pem
+SSL_CERT=/opt/roundcube/.ssl/certificate.crt
+SSL_KEY=/opt/roundcube/.ssl/certificate.key
 
-mkdir -p /etc/.ssl/
+mkdir -p /opt/roundcube/.ssl/
 
 #Create the request
 echo "Creating CSR"

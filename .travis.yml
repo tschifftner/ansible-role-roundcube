@@ -72,9 +72,8 @@ after_failure:
   - curl http://127.0.0.1/
   - curl http://localhost/
   - nginx -v
-  - ls -lh /opt/roundcube/
-  - ls -lh /opt/roundcube/round*
-  - cat /opt/roundcube/round*/config/config.inc.php
+  - sudo nginx -t
+  - sudo ls -lh /opt/roundcube/
   - composer -v
   - sudo cat /etc/php5/fpm/pool.d/system.roundcube.conf
   - sudo cat /etc/nginx/conf.d/roundcube.conf

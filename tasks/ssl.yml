@@ -15,18 +15,18 @@
   when: roundcube_nginx_ssl_save_path is defined
 
 - name: Generate trustchain.crt
-  no_log: true
+  #no_log: true
   template:
     src: 'ssl/trustchain.crt'
     dest: '{{ roundcube_nginx_ssl_trusted_certificate_path }}'
   when: >
     roundcube_nginx_ssl_root_certificate is defined and
     roundcube_nginx_ssl_root_certificate != '' and
-    roundcube_nginx_ssl_intermediate_certificate is defined
-    and roundcube_nginx_ssl_intermediate_certificate != ''
+    roundcube_nginx_ssl_intermediate_certificate is defined and
+    roundcube_nginx_ssl_intermediate_certificate != ''
 
 - name: Generate certificate.key
-  no_log: true
+  #no_log: true
   template:
     src: 'ssl/certificate.key'
     dest: '{{ roundcube_nginx_ssl_certificate_key_path }}'
@@ -35,7 +35,7 @@
     roundcube_nginx_ssl_certificate_key != ''
 
 - name: Generate certificate.crt
-  no_log: true
+  #no_log: true
   template:
     src: 'ssl/certificate.crt'
     dest: '{{ roundcube_nginx_ssl_certificate_path }}'
