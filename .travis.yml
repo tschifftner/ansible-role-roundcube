@@ -62,7 +62,8 @@ script:
   - test -e /opt/roundcube/sessions
   - test -e /opt/roundcube/tmp
   - test -e /opt/roundcube/usr
-
+  - curl https://localhost:444
+  - curl http://localhost:444
 
 after_failure:
   - ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
@@ -74,7 +75,9 @@ after_failure:
   - ls -lh /opt/roundcube/
   - ls -lh /opt/roundcube/round*
   - cat /opt/roundcube/round*/config/config.inc.php
-  - composer
+  - composer -v
+  - curl https://localhost:444
+  - curl http://localhost:444
 
 notifications:
   slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
