@@ -62,8 +62,8 @@ script:
   - test -e /opt/roundcube/sessions
   - test -e /opt/roundcube/tmp
   - test -e /opt/roundcube/usr
-  - curl https://localhost:444
-  - curl http://localhost:444
+  - curl https://localhost
+  - curl http://localhost
 
 after_failure:
   - ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
