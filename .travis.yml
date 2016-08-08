@@ -62,8 +62,14 @@ script:
   - test -e /opt/roundcube/sessions
   - test -e /opt/roundcube/tmp
   - test -e /opt/roundcube/usr
-  - curl https://localhost
-  - curl http://localhost
+
+  - >
+    if [[ "$SITE" == "test-with-ssl.yml" ]]; then
+      curl https://localhost | grep 'ambimax® RoundCube';
+    else
+      curl http://localhost | grep 'ambimax® RoundCube';
+    fi
+#  - if [[ "$SITE" == "test-without-ssl.yml" ]]; then curl http://localhost | grep 'ambimax® RoundCube'; fi
 
 after_failure:
   - ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo

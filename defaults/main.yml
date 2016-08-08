@@ -36,9 +36,10 @@ roundcube_skin: 'larry'
 roundcube_log_driver: 'syslog'
 
 # Nginx
-roundcube_nginx_listen: '443'
-roundcube_nginx_server_name: "_default_"
+roundcube_nginx_listen: "{{ 443 if roundcube_nginx_ssl_on else 80 }}"
+roundcube_nginx_server_name: '{{ ansible_fqdn }}'
 
+roundcube_nginx_ssl_on: "{{ true if roundcube_nginx_ssl_certificate != '' and roundcube_nginx_ssl_certificate_key != '' else false }}"
 roundcube_nginx_ssl_redirect: 'https://{{ roundcube_nginx_server_name }}$request_uri'
 roundcube_nginx_ssl_save_path: '{{ roundcube_working_dir }}/.ssl'
 
