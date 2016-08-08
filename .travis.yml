@@ -65,7 +65,7 @@ script:
 
   - >
     if [[ "$SITE" == "test-with-ssl.yml" ]]; then
-      curl https://localhost | grep 'ambimax® RoundCube';
+      curl --insecure https://localhost | grep 'ambimax® RoundCube';
     else
       curl http://localhost | grep 'ambimax® RoundCube';
     fi
