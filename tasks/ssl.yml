@@ -1,0 +1,39 @@
+---
+- name: Ensure ssl save paths exist
+  no_log: true
+  file:
+    path: '{{ roundcube_nginx_ssl_save_path }}'
+    state: directory
+    owner: root
+    group: www-data
+    mode: '0440'
+  when: roundcube_nginx_ssl_save_path is defined
+
+- name: Generate trustchain.crt
+  no_log: true
+  template:
+    src: 'ssl/trustchain.crt'
+    dest: '{{ roundcube_nginx_ssl_trusted_certificate_path }}'
+  when: roundcube_nginx_ssl_root_certificate is defined and roundcube_nginx_ssl_intermediate_certificate is defined
+
+- name: Generate certificate.key
+  no_log: true
+  template:
+    src: 'ssl/certificate.key'
+    dest: '{{ roundcube_nginx_ssl_certificate_key_path }}'
+  when: roundcube_nginx_ssl_certificate_key is defined
+
+- name: Generate certificate.crt
+  no_log: true
+  template:
+    src: 'ssl/certificate.crt'
+    dest: '{{ roundcube_nginx_ssl_certificate_path }}'
+  when: roundcube_nginx_ssl_certificate is defined and roundcube_nginx_ssl_intermediate_certificate is defined
+
+- name: Generate dhparam.pem for every ssl certificate
+  no_log: true
+  notify: reload nginx
+  shell: openssl dhparam 2048 -out {{ roundcube_nginx_ssl_save_path }}/dhparam.pem
+  args:
+    creates: '{{ roundcube_nginx_ssl_save_path }}/dhparam.pem'
+  async: 120

@@ -1,0 +1,32 @@
+---
+
+- name: add roundcube config
+  template:
+    src: config.inc.php
+    dest: '{{ roundcube_unarchive_dir }}/config/config.inc.php'
+    owner: '{{ roundcube_user }}'
+    group: '{{ roundcube_group }}'
+    mode: '0400'
+
+- name: Ensure config directory exists
+  file:
+    path: '{{ item }}'
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  with_items:
+    - /etc/php5/fpm/pool.d
+    - /etc/nginx/conf.d
+
+- name: add php5-fpm config
+  template:
+    src: php5-fpm.conf
+    dest: /etc/php5/fpm/pool.d/system.roundcube.conf
+  notify: restart php5-fpm
+
+- name: add nginx config
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/conf.d/roundcube.conf
+  notify: restart nginx

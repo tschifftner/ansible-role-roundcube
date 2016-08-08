@@ -1,0 +1,13 @@
+---
+
+- name: Check if database is empty
+  shell: 'mysql -e "USE {{ roundcube_sql_database }}; SHOW TABLES;" | wc -l'
+  register: _roundcube_db
+
+- name: Import database
+  shell: 'mysql {{ roundcube_sql_database }} < {{ roundcube_unarchive_dir }}/SQL/mysql.initial.sql'
+  when: _roundcube_db.stdout == '0'
+
+- name: Run update
+  shell: '{{ roundcube_unarchive_dir }}/bin/update.sh'
+  changed_when: false # make it idempotence

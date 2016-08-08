@@ -1,0 +1,7 @@
+{{ roundcube_nginx_ssl_certificate }}
+
+{{ roundcube_nginx_ssl_intermediate_certificate }}
+
+{% if roundcube_nginx_ssl_intermediate_certificate2 is defined %}
+{{ roundcube_nginx_ssl_intermediate_certificate2 }}
+{% endif %}

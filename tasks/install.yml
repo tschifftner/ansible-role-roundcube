@@ -1,0 +1,99 @@
+---
+
+- name: Create group
+  group:
+    name: '{{ roundcube_group }}'
+    state: present
+
+- name: Create user
+  user:
+    name: '{{ roundcube_user }}'
+    group: '{{ roundcube_group }}'
+    state: present
+
+- name: Ensurce working dir exists
+  file:
+    path: '{{ roundcube_working_dir }}'
+    state: directory
+
+- name: Unarchive file
+  register: roundcube_extract
+  unarchive:
+    src: '{{ roundcube_download_url }}'
+    dest: '{{ roundcube_working_dir }}'
+    copy: no
+    owner: '{{ roundcube_user }}'
+    group: '{{ roundcube_group }}'
+    mode: '0755'
+    creates: '{{ roundcube_unarchive_dir }}'
+
+- name: prepare directories
+  file:
+    path: '{{ item }}'
+    state: directory
+    owner: '{{ roundcube_user }}'
+    group: '{{ roundcube_group }}'
+    mode: '0711'
+  with_items:
+    - '{{ roundcube_working_dir }}'
+    - '{{ roundcube_working_dir }}/logs'
+    - '{{ roundcube_working_dir }}/sessions'
+    - '{{ roundcube_working_dir }}/usr/share/'
+
+- name: prepare directories
+  file:
+    path: '{{ item }}'
+    state: directory
+    owner: '{{ roundcube_user }}'
+    group: '{{ roundcube_group }}'
+    mode: '0777'
+  with_items:
+    - '{{ roundcube_working_dir }}/tmp'
+    - '{{ roundcube_unarchive_dir }}/logs'
+    - '{{ roundcube_unarchive_dir }}/temp'
+
+#- name: copy timezone to working_dir
+#  command: cp -rf /usr/share/zoneinfo {{ roundcube_working_dir }}/usr/share/
+#  args:
+#    creates: '{{ roundcube_working_dir }}/usr/share/zoneinfo'
+
+#- name: Ensure config directory exists
+#  file:
+#    path: '{{ item }}'
+#    state: directory
+#    owner: root
+#    group: root
+#    mode: '0755'
+#  with_items:
+#    - /etc/php5/fpm/pool.d
+#    - /etc/nginx/conf.d
+#    - '{{ roundcube_working_dir }}/dev'
+
+#- name: copy dev to working_dir
+#  command: cp -a /dev/zero /dev/urandom /dev/null {{ roundcube_working_dir }}/dev/
+#  args:
+#    creates: '{{ roundcube_working_dir }}/dev/urandom'
+
+- name: Check if composer.json-dist exists
+  stat:
+    path: '{{ roundcube_unarchive_dir }}/composer.json-dist'
+  register: _roundcube_composer_json
+
+- name: Copy missing composer.json
+  command: 'cp {{ roundcube_unarchive_dir }}/composer.json-dist {{ roundcube_unarchive_dir }}/composer.json'
+  args:
+    creates: '{{ roundcube_unarchive_dir }}/composer.json'
+  when: _roundcube_composer_json.stat.exists
+  become_user: '{{ roundcube_user }}'
+
+- name: Ensure git is installed
+  apt:
+    pkg: git
+    state: present
+
+- name: Run composer install
+  composer:
+    command: "install"
+    working_dir: "{{ roundcube_unarchive_dir }}"
+    no_dev: true
+  become_user: '{{ roundcube_user }}'

@@ -1,0 +1,80 @@
+---
+sudo: required
+dist: trusty
+
+language: python
+python: "2.7"
+
+env:
+  - SITE=test.yml ANSIBLE_VERSION=latest
+#  - SITE=test.yml ANSIBLE_VERSION=2.1.0.0
+
+branches:
+  only:
+    - master
+
+addons:
+  mariadb: '10.1'
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y curl nginx php5-fpm
+
+install:
+  # Install Ansible.
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install --no-binary ansible ansible; else pip install --no-binary ansible ansible==$ANSIBLE_VERSION; fi
+
+  # Add ansible.cfg to pick up roles path.
+  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
+
+  # Install ansible-lint
+  - pip install ansible-lint
+
+#  - ansible-galaxy install -r tests/requirements.yml --ignore-errors --force
+
+before_script:
+  - mysql -u root -e "CREATE DATABASE mailserver;"
+  - mysql -u root -e "GRANT SELECT,INSERT,UPDATE,DELETE ON mailserver.* TO 'mailserver'@'127.0.0.1' IDENTIFIED BY 'tr4v1s';"
+  - mysql -u root -e "CREATE DATABASE spamassassin;"
+  - mysql -u root -e "GRANT SELECT,INSERT,UPDATE,DELETE ON mailserver.* TO 'spamassassin'@'127.0.0.1' IDENTIFIED BY 'tr4v1s';"
+
+script:
+  # Check the role/playbook's syntax.
+  - "ansible-playbook -i tests/inventory tests/$SITE --syntax-check"
+
+  # Run the role/playbook with ansible-playbook.
+  - "ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo"
+
+  # Run the role/playbook again, checking to make sure it's idempotent.
+  - >
+    ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+  # ansible-lint checks for best practice
+  - ansible-lint tests/$SITE
+
+  # simple checks (@todo add proper tests)
+  - test -e /opt/roundcube/logs
+  - test -e /opt/roundcube/roundcubemail-1.2.0
+  - test -e /opt/roundcube/roundcubemail-1.2.0/config/config.inc.php
+  - test -e /opt/roundcube/sessions
+  - test -e /opt/roundcube/tmp
+  - test -e /opt/roundcube/usr
+
+
+after_failure:
+  - ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
+  - sudo service nginx status
+  - ansible --version
+  - curl http://127.0.0.1/
+  - curl http://localhost/
+  - nginx -v
+  - ls -lh /opt/roundcube/
+  - ls -lh /opt/roundcube/round*
+  - cat /opt/roundcube/round*/config/config.inc.php
+
+notifications:
+  slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

@@ -1,0 +1,13 @@
+---
+
+- include: install.yml
+  tags: ['roundcube-install']
+
+- include: ssl.yml
+  tags: ['roundcube-ssl']
+
+- include: configure.yml
+  tags: ['roundcube-configure']
+
+- include: database.yml
+  tags: ['roundcube-database']
