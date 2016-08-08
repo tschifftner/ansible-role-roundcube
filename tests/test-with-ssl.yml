@@ -7,6 +7,7 @@
     roundcube_install_version: '1.2.0'
     roundcube_nginx_server_name: localhost
     roundcube_nginx_ssl_on: true
+    roundcube_nginx_ssl_trusted_certificate_path: '/opt/roundcube/.ssl/certificate.crt'
     roundcube_nginx_ssl_certificate_path: '/opt/roundcube/.ssl/certificate.crt'
     roundcube_nginx_ssl_certificate_key_path: '/opt/roundcube/.ssl/certificate.key'
 
