@@ -16,7 +16,7 @@
     dest: '{{ roundcube_nginx_ssl_trusted_certificate_path }}'
   when: >
     roundcube_nginx_ssl_root_certificate is defined and
-    roundcube_nginx_ssl_root_certificate != ''
+    roundcube_nginx_ssl_root_certificate != '' and
     roundcube_nginx_ssl_intermediate_certificate is defined
     and roundcube_nginx_ssl_intermediate_certificate != ''
 

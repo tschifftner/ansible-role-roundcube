@@ -32,7 +32,6 @@ install:
   # Install ansible-lint
   - pip install ansible-lint
 
-#  - ansible-galaxy install -r tests/requirements.yml --ignore-errors --force
   - sudo ./tests/generate-ssl.sh
 
 before_script:
