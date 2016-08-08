@@ -13,3 +13,6 @@ openssl req -new -x509 -days 365 -nodes -out $SSL_CERT -keyout $SSL_KEY \
 chown root:root $SSL_CERT $SSL_KEY
 chmod 0444 $SSL_CERT
 chmod 0400 $SSL_KEY
+
+# Make trustchain.crt
+cp /opt/roundcube/.ssl/certificate.crt /opt/roundcube/.ssl/trustchain.crt
