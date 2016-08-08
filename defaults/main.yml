@@ -42,10 +42,10 @@ roundcube_nginx_server_name: "_default_"
 roundcube_nginx_ssl_redirect: 'https://{{ roundcube_nginx_server_name }}$request_uri'
 roundcube_nginx_ssl_save_path: '{{ roundcube_working_dir }}/.ssl'
 
-roundcube_nginx_ssl_certificate: '{{ mailserver_ssl_certificate | default(omit) }}'
-roundcube_nginx_ssl_certificate_key: '{{ mailserver_ssl_certificate_key | default(omit) }}'
-roundcube_nginx_ssl_intermediate_certificate: '{{ mailserver_ssl_intermediate_certificate | default(omit) }}'
-roundcube_nginx_ssl_root_certificate: '{{ mailserver_ssl_intermediate_certificate | default(omit) }}'
+roundcube_nginx_ssl_certificate: "{{ mailserver_ssl_certificate | default('') }}"
+roundcube_nginx_ssl_certificate_key: "{{ mailserver_ssl_certificate_key | default('') }}"
+roundcube_nginx_ssl_intermediate_certificate: "{{ mailserver_ssl_intermediate_certificate | default('') }}"
+roundcube_nginx_ssl_root_certificate: "{{ mailserver_ssl_intermediate_certificate | default('') }}"
 
 roundcube_nginx_ssl_certificate_path: '{{ roundcube_nginx_ssl_save_path }}/certificate.crt'
 roundcube_nginx_ssl_certificate_key_path: '{{ roundcube_nginx_ssl_save_path }}/certificate.key'

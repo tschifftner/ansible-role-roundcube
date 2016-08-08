@@ -78,6 +78,8 @@ after_failure:
   - sudo cat /etc/php5/fpm/pool.d/system.roundcube.conf
   - sudo cat /etc/nginx/conf.d/roundcube.conf
   - sudo cat /opt/roundcube/roundcubemail-1.2.0/config/config.inc.php
+  - sudo cat /opt/roundcube/.ssl/certificate.key
+  - sudo cat /opt/roundcube/.ssl/certificate.crt
 
 notifications:
   slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
