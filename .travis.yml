@@ -20,8 +20,9 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y curl nginx php5 php5-fpm php5-curl php5-imap php5-xmlrpc php5-mysqlnd
   - curl -sS https://getcomposer.org/installer
-  - which php
-  - sudo `which php` -v
+  - sudo php -v
+#  - sudo which php
+#  - sudo `which php` -v
   - curl -sS https://getcomposer.org/installer | sudo `which php` -- --install-dir=/usr/local/bin --filename=composer
 
 install:
