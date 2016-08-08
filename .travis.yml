@@ -76,8 +76,9 @@ after_failure:
   - ls -lh /opt/roundcube/round*
   - cat /opt/roundcube/round*/config/config.inc.php
   - composer -v
-  - curl https://localhost:444
-  - curl http://localhost:444
+  - sudo cat /etc/php5/fpm/pool.d/system.roundcube.conf
+  - sudo cat /etc/nginx/conf.d/roundcube.conf
+  - sudo cat /opt/roundcube/roundcubemail-1.2.0/config/config.inc.php
 
 notifications:
   slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6

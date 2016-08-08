@@ -1,4 +1,9 @@
 ---
+- debug: msg="{{ roundcube_nginx_ssl_root_certificate }}"
+- debug: msg="{{ roundcube_nginx_ssl_intermediate_certificate }}"
+- debug: msg="{{ roundcube_nginx_ssl_certificate_key }}"
+- debug: msg="{{ roundcube_nginx_ssl_certificate }}"
+
 - name: Ensure ssl save paths exist
   no_log: true
   file:
