@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  remote_user: root
+
+  vars:
+    # Use same version for testing. Use http url as ansible on travis fails with https.
+    roundcube_install_version: '1.2.0'
+    roundcube_nginx_server_name: localhost
+
+    roundcube_sql_host: "127.0.0.1"
+    roundcube_sql_database: "roundcube"
+    roundcube_sql_user: "roundcube"
+    roundcube_sql_password: "tr4v1s"
+
+  roles:
+    - ansible-role-roundcube

@@ -6,7 +6,8 @@ language: python
 python: "2.7"
 
 env:
-  - SITE=test.yml ANSIBLE_VERSION=latest
+  - SITE=test-with-ssl.yml ANSIBLE_VERSION=latest
+  - SITE=test-without-ssl.yml ANSIBLE_VERSION=latest
 #  - SITE=test.yml ANSIBLE_VERSION=2.1.0.0
 
 branches:
@@ -19,11 +20,7 @@ addons:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y curl nginx php5 php5-cli php5-fpm php5-curl php5-imap php5-xmlrpc php5-mysqlnd
-  - curl -sS https://getcomposer.org/installer
-  - php -v
-#  - sudo which php
-#  - sudo `which php` -v
-  - curl -sS https://getcomposer.org/installer | sudo `which php` -- --install-dir=/usr/local/bin --filename=composer
+  - curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 install:
   # Install Ansible.
@@ -36,6 +33,7 @@ install:
   - pip install ansible-lint
 
 #  - ansible-galaxy install -r tests/requirements.yml --ignore-errors --force
+  - sudo ./tests/generate-ssl.sh
 
 before_script:
   - mysql -u root -e "CREATE DATABASE roundcube;"
