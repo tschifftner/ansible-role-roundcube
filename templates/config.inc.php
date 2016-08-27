@@ -37,7 +37,8 @@ $config['db_dsnw'] = 'mysql://{{ roundcube_sql_user }}:{{ roundcube_sql_password
 // %d - domain (http hostname $_SERVER['HTTP_HOST'] without the first part)
 // %s - domain name after the '@' from e-mail address provided at login screen
 // For example %n = mail.domain.tld, %t = domain.tld
-$config['default_host'] = 'localhost';
+$config['default_host'] = '{{ roundcube_default_host }}';
+$config['default_port'] = '{{ roundcube_default_port }}';
 
 // SMTP server host (for sending mails).
 // To use SSL/TLS connection, enter hostname with prefix ssl:// or tls://
@@ -82,9 +83,7 @@ $config['plugins'] = array('{{ roundcube_plugins  | join("', '")}}');
 // skin name: folder from skins/
 $config['skin'] = '{{ roundcube_skin }}';
 
-
-#$config['default_host'] = '{{ roundcube_default_host }}';
-#$config['default_port'] = '{{ roundcube_default_port }}';
+# Other configuration
 $config['ip_check'] = '{{ roundcube_ip_check }}';
 $config['language'] = '{{ roundcube_language }}';
 $config['enable_spellcheck'] = '{{ roundcube_enable_spellcheck }}';
