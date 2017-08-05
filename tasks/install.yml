@@ -62,6 +62,7 @@
   args:
     creates: '{{ roundcube_unarchive_dir }}/composer.json'
   when: _roundcube_composer_json.stat.exists
+  become: true
   become_user: '{{ roundcube_user }}'
 
 - name: Ensure git is installed
@@ -74,4 +75,5 @@
     command: "install"
     working_dir: "{{ roundcube_unarchive_dir }}"
     no_dev: true
+  become: true
   become_user: '{{ roundcube_user }}'
