@@ -27,7 +27,7 @@ install:
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install --no-binary ansible ansible; else pip install --no-binary ansible ansible==$ANSIBLE_VERSION; fi
 
   # Add ansible.cfg to pick up roles path.
-  - "{ echo '[defaults]'; echo 'roles_path = ../'; [ssh_connection]; pipelining=True; } >> ansible.cfg"
+  - "{ echo '[defaults]'; echo 'roles_path = ../'; echo '[ssh_connection]'; echo 'pipelining=True'; } >> ansible.cfg"
 
   # Install ansible-lint
   - pip install ansible-lint
@@ -86,6 +86,7 @@ after_failure:
   - sudo cat /opt/roundcube/roundcubemail-1.2.0/config/config.inc.php
   - sudo cat /opt/roundcube/.ssl/certificate.key
   - sudo cat /opt/roundcube/.ssl/certificate.crt
+  - sudo cat ansible.cfg
 
 notifications:
   slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
